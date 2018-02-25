@@ -28,6 +28,8 @@ import (
 	"time"
 
 	"github.com/tarm/serial"
+
+	iserial "github.com/harenber/ptc-go/ptc/internal/serial"
 )
 
 type pmodem struct {
@@ -50,7 +52,7 @@ type pmodem struct {
 	rtd chan struct{} //ready to disconnect (=txbuffer empty)
 
 	rxbuffer chan []byte // data FROM PACTOR
-	device   *serial.Port
+	device   io.ReadWriteCloser
 
 	mu       sync.Mutex
 	txbuffer []byte // data TO PACTOR
@@ -586,9 +588,13 @@ func (p *pmodem) pconnect() error {
 	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
 
 	//Setup serial device
-	c := &serial.Config{Name: p.deviceName, Baud: p.baudRate, ReadTimeout: time.Second * serialtimeout}
 	var err error
-	p.device, err = serial.OpenPort(c)
+	if false {
+		c := &serial.Config{Name: p.deviceName, Baud: p.baudRate, ReadTimeout: time.Second * serialtimeout}
+		p.device, err = serial.OpenPort(c)
+	} else {
+		p.device, err = iserial.Open(p.deviceName, p.baudRate)
+	}
 	if err != nil {
 		writeDebug(err.Error())
 		return err
