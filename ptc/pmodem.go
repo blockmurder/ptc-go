@@ -554,7 +554,7 @@ func (p *pmodem) call() error {
 		}
 		if len(l) > 0 {
 			status := l[len(l)-1]
-			//log.Println("Antwort auf  L: " + string(l) + "  status is: " + string(status))
+			writeDebug("answer to L: " + string(l) + "  status is: " + string(status))
 			switch string(status) {
 			case "4":
 				//connected
