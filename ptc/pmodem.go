@@ -237,14 +237,14 @@ func read(r reader, delim []byte) (line []byte, err error) {
 
 func (p *pmodem) writeexpect(command string, answer string) (b []byte, err error) {
 	_, err = p.device.Write([]byte(command + "\r"))
-	//log.Println(">>> " + command)
+	writeDebug(">>> " + command)
 	if err != nil {
 		writeDebug(err.Error())
 		return nil, err
 	}
 
 	b, err = p.readuntil(answer)
-	//log.Printf("<<< %s\n", b)
+	writeDebug(fmt.Sprintf("<<< %s\n", b))
 	return
 }
 
