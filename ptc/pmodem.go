@@ -62,7 +62,7 @@ type pmodem struct {
 }
 
 const (
-	pactorch      = 4
+	pactorch      = 31
 	serialtimeout = 1
 	pttimeout     = 240
 	maxtxbuffer   = 128 // Write() will block if there are more bytes waiting to be sent.
@@ -611,7 +611,7 @@ func (p *pmodem) pconnect() error {
 	}()
 	p.writeexpect("QUIT", "cmd: ")
 	p.writeexpect("MY "+p.mycall, "cmd: ")
-	p.writeexpect("PTCH 4", "cmd: ")
+	p.writeexpect("PTCH 31", "cmd: ")
 
 	if p.init_script == "" {
 		p.writeexpect("TONES 4", "cmd: ")
